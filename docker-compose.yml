@@ -4,3 +4,6 @@ services:
     build: .
     ports:
       - 8000:8000
+    environment:
+      - CHECKER_HOST=https://api.checkr.com
+      - CHECKER_API_KEY=some_api_key

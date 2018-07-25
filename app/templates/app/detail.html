@@ -1,3 +1,33 @@
-{{pii_data}}
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
+<h1>Original data. Revealed via VGS inbound route.</h1>
+<p><label for="date">Date:</label> <label id="date"></label></p>
+<p><label for="snn">Social Security Number:</label> <label id="snn"></label></p>
+<p><label for="n_id">Driver License Number:</label> <label id="n_id"></label></p>
+<button onclick="checkrRun()">Check on Checkr</button>
 <br><br>
 <a href="/app/">Main page</a>
+<br><br><br>
+<label for="checkr_output">Checkr result:</label>
+<textarea id="checkr_output" style="width:  500px;height: 500px;"></textarea>
+
+<script>
+    function checkrRun() {
+        $.get('{{ host }}/app/api/checkr/{{pii_data.id}}/',
+              function onSuccess(data){
+                  $("#checkr_output").text(JSON.stringify(data, null, 2))
+              }
+        )
+    }
+
+    function fillOutPage(){
+        $.get('{{ host }}/app/api/data/{{pii_data.id}}/',
+              function onSuccess(data){
+                  $("#date").text(data.pub_date);
+                  $("#snn").text(data.social_security_number);
+                  $("#n_id").text(data.driver_license_number);
+              }
+        )
+    }
+    window.onload = fillOutPage;
+</script>
