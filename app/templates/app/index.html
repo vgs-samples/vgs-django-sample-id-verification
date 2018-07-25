@@ -1,0 +1,36 @@
+<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+<form id="form_id" action="/app/add" method="POST">
+    {% csrf_token %}
+    <input type="text" name="SNN" id="SNN" value="" />
+    <label for="SNN">Social Security Number</label><br />
+    <input type="text" name="national_id" id="national_id" value="" />
+    <label for="national_id">National Id</label><br />
+    <input type="submit" value="Add" />
+</form>
+
+<script>
+
+    $( "#form_id" ).submit(function( event ) {
+        event.preventDefault();
+        $.post('{{ server_uri }}', {
+            'csrfmiddlewaretoken': $("input[name='csrfmiddlewaretoken']").val(),
+            'SNN': $("input[name^='SNN']").val(),
+            'national_id': $("input[name^='national_id']").val()
+        },
+        function onSuccess(id){
+            window.location.href = "/app/" + id +"/"
+        }
+        );
+    });
+</script>
+
+
+{% if pii_data_list %}
+<ul>
+    {% for piiData in pii_data_list %}
+    <li><a href="/app/{{ piiData.id }}/">{{ piiData.social_security_number}}</a></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No data are available.</p>
+{% endif %}

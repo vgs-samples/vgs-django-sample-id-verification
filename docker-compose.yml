@@ -1,0 +1,6 @@
+version: '3'
+services:
+  vgs-django-sample:
+    build: .
+    ports:
+      - 8000:8000
