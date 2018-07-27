@@ -27,8 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-VGS_REVERSE_PROXY='https://tntvsu7b08w.SANDBOX.verygoodproxy.com'
-
+# VGS_REVERSE_PROXY='https://tntvsu7b08w.SANDBOX.verygoodproxy.com'
+# VGS_FORWARD_PROXY='https://US4HaDCukkzFFPcGe3nYR933:f0748f46-dcdd-4320-a7de-8f2204fef53a@tntvsu7b08w.SANDBOX.verygoodproxy.com:8080'
+CHECKER_HOST='https://api.checkr.com'
 
 # Application definition
 

@@ -1,10 +1,11 @@
 <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+
 <form id="form_id" action="/app/add" method="POST">
     {% csrf_token %}
     <input type="text" name="SNN" id="SNN" value="" />
     <label for="SNN">Social Security Number</label><br />
-    <input type="text" name="national_id" id="national_id" value="" />
-    <label for="national_id">National Id</label><br />
+    <input type="text" name="driver_license_number" id="driver_license_number" value="" />
+    <label for="driver_license_number">Driver License Number</label><br />
     <input type="submit" value="Add" />
 </form>
 
@@ -12,10 +13,10 @@
 
     $( "#form_id" ).submit(function( event ) {
         event.preventDefault();
-        $.post('{{ server_uri }}', {
+        $.post('{{ host }}/app/add', {
             'csrfmiddlewaretoken': $("input[name='csrfmiddlewaretoken']").val(),
             'SNN': $("input[name^='SNN']").val(),
-            'national_id': $("input[name^='national_id']").val()
+            'driver_license_number': $("input[name^='driver_license_number']").val()
         },
         function onSuccess(id){
             window.location.href = "/app/" + id +"/"
@@ -24,11 +25,15 @@
     });
 </script>
 
-
+<h1>Data from application storage</h1>
 {% if pii_data_list %}
 <ul>
     {% for piiData in pii_data_list %}
-    <li><a href="/app/{{ piiData.id }}/">{{ piiData.social_security_number}}</a></li>
+    <li>
+        <p>SNN: {{ piiData.social_security_number}}</p>
+        <p>Driver License Number: {{ piiData.driver_license_number}}</p>
+        <a href="/app/{{ piiData.id }}/">Show original data</a>
+    </li>
     {% endfor %}
 </ul>
 {% else %}
