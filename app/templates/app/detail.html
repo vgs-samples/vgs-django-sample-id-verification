@@ -8,14 +8,17 @@
 <br><br>
 <a href="/app/">Main page</a>
 <br><br><br>
+<label id="loading_message" style="display: none">Waiting for Checkr response...</label>
 <label for="checkr_output">Checkr result:</label>
 <textarea id="checkr_output" style="width:  500px;height: 500px;"></textarea>
 
 <script>
     function checkrRun() {
+        $("#loading_message").show();
         $.get('{{ host }}/app/api/checkr/{{pii_data.id}}/',
               function onSuccess(data){
                   $("#checkr_output").text(JSON.stringify(data, null, 2))
+                  $("#loading_message").hide();
               }
         )
     }
