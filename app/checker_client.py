@@ -25,7 +25,7 @@ class CheckerClient:
     def create_candidate(self,
                          ssn,
                          dln,
-                         geo_id="486bfc16a8fd6f33519b89af" #San Francisco CA
+                         geo_id
                          ):
         candidate_data = {
             'first_name': "testName",
@@ -69,6 +69,17 @@ class CheckerClient:
 
         return r.json()['id']
 
+    def get_geos(self):
+        r = requests.get(
+            self.host + '/v1/geos',
+            auth=(self.api_key, '')
+        )
+
+        if r.status_code != 200:
+            raise CheckerServiceException(r.status_code, r.json()['error'])
+
+        return r.json()['data']
+
     def create_geo(self, name, city, state):
         candidate_data = {
             'name': name,
@@ -96,7 +107,7 @@ class CheckerClient:
 
         start = datetime.now()
         r = requests.get(
-            self.host + '/v1/reports/'+ report_id,
+            self.host + '/v1/reports/' + report_id,
             auth=(self.api_key, '')
         )
 
@@ -105,7 +116,7 @@ class CheckerClient:
 
         if r.json()["status"] == "pending":
             sleep(1)
-            spending_time =  datetime.now() - start
+            spending_time = datetime.now() - start
             spending_time_microsec = spending_time.seconds + 1000 + spending_time.microseconds / 1000
             remaining_timeout = timeout_sec - spending_time_microsec
             return self.__retrieve_report(report_id, remaining_timeout)
@@ -114,7 +125,3 @@ class CheckerClient:
             return r.json()
 
         raise CheckerClientException("Could not generate report")
-
-
-
-

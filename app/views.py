@@ -24,6 +24,7 @@ def turn_off_proxy():
         del os.environ["HTTPS_PROXY"]
         del os.environ["REQUESTS_CA_BUNDLE"]
 
+
 def index(request):
     pii_data_list = PiiData.objects.order_by('-pub_date')[:5]
     host = getattr(settings, "VGS_REVERSE_PROXY", "")
@@ -60,16 +61,23 @@ def check(request, data_id):
 
     pii_data = get_object_or_404(PiiData, pk=data_id)
     try:
+        geos = check_client.get_geos()
+        if len(geos) == 0:
+            geo_id = check_client.create_geo('San Francisco', 'San Francisco', 'CA')
+        else:
+            geo_id = geos[0]['id']
         turn_on_proxy()
         candidate_id = check_client.create_candidate(
             ssn=pii_data.social_security_number,
             dln=pii_data.driver_license_number,
+            geo_id=geo_id
         )
         turn_off_proxy()
         report_id = check_client.create_report(candidate_id)
         report = check_client.retrieve_report(report_id)
     except CheckerServiceException as e:
-        return HttpResponse(json.dumps({"status_code": e.status_code, "error:": e.error}), content_type="application/json")
+        return HttpResponse(json.dumps({"status_code": e.status_code, "error:": e.error}),
+                            content_type="application/json")
 
     return HttpResponse(json.dumps(report), content_type="application/json")
 
@@ -78,14 +86,14 @@ def json_serial(obj):
     """JSON serializer for objects not serializable by default json code"""
     if isinstance(obj, datetime):
         return obj.isoformat()
-    raise TypeError ("Type %s not serializable" % type(obj))
+    raise TypeError("Type %s not serializable" % type(obj))
 
 
 @csrf_exempt
 def add(request):
     snn = request.POST['SNN']
     driver_license_number = request.POST['driver_license_number']
-    pii_data = PiiData(social_security_number=snn, driver_license_number=driver_license_number, pub_date=datetime.now())
+    pii_data = PiiData(social_security_number=snn, driver_license_number=driver_license_number,
+                       pub_date=datetime.now())
     pii_data.save()
     return HttpResponse(str(pii_data.id))
-
