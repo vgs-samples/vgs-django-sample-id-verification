@@ -1,6 +1,6 @@
 <p align="center"><a href="https://www.verygoodsecurity.com/"><img src="https://avatars0.githubusercontent.com/u/17788525" width="128" alt="VGS Logo"></a></p>
-<p align="center"><b>vgs-android-sample</b></p>
-<p align="center"><i>Sample of using VGS on Android with three common use cases.</i></p>
+<p align="center"><b>vgs-django-pii-sample</b></p>
+<p align="center"><i>Sample of using VGS for secure PII data(Django).</i></p>
 
 ## Quick Start
 
