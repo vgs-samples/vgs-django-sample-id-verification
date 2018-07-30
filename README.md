@@ -16,7 +16,7 @@
 
 Application will be started in Docker container and available at [http:localhost:8000/app/](http:localhost:8000/app/)
 
-Application can work without VGS integration, it just stored all the PII (Personsally identifiable information) data in storage. 
+Before integrating with VGS, the application works but it stores all PII (Peronsally identifiable information) data in storage.
 
 
 ## How to secure application with VGS
@@ -39,7 +39,7 @@ Since we do not want to store PII data in our own storage, VGS can take data cus
   - setup filter to process request data
   <img src="images/inbound_request_filter.png" >
   
-2.2 To make data readable, lets setup another filter, that will reveal PII data in client's response:
+2.2 To make data readable for the customer who owns this data, lets setup another filter, that will reveal PII data in client's response:
   - add new filter in the `inbound` route
   <img src="images/add_next_filter.png" >
   
