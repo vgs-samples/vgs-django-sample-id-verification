@@ -1,10 +1,13 @@
 <p align="center"><a href="https://www.verygoodsecurity.com/"><img src="https://avatars0.githubusercontent.com/u/17788525" width="128" alt="VGS Logo"></a></p>
 <p align="center"><b>vgs-django-pii-sample</b></p>
-<p align="center"><i>Sample of using VGS for secure PII data(Django).</i></p>
+<p align="center"><i>Sample of using VGS for securing PII data(Django).</i></p>
+
+## Requirements
+- [Docker](https://www.docker.com/get-docker)
+- [ngrok](https://ngrok.com/)
+- account on [checkr.com](https://checkr.com/)
 
 ## Quick Start
-**Requirements:** [Docker](https://www.docker.com/get-docker), [ngrok](https://ngrok.com/), account on [checkr.com](https://checkr.com/)
-
 1. Clone repository
 2. Register on checkr.com
 3. Put your `CHECKER_API_KEY` to `docker-compose.yml` file
@@ -13,7 +16,7 @@
 
 Application will be started in Docker container and available at [http:localhost:8000/app/](http:localhost:8000/app/)
 
-Before integrating with VGS, the application works but it stores all PII (Peronsally identifiable information) data in storage.
+Application can work without VGS integration, it just stored all the PII (Personsally identifiable information) data in storage. 
 
 
 ## How to secure application with VGS
@@ -25,8 +28,10 @@ Since we do not want to store PII data in our own storage, VGS can take data cus
 2. Lets setup `inboud` traffic protection: 
   - go to `Routes`
   <img src="images/go_to_routes.png" width="256">
+  
   - create new `inbound route`
   <img src="images/new_inbound_route.png" >
+  
   - add `upstream` as an app host from `ngrok`
   <img src="images/inbound_setup_upstream.png" >
   
@@ -34,9 +39,10 @@ Since we do not want to store PII data in our own storage, VGS can take data cus
   - setup filter to process request data
   <img src="images/inbound_request_filter.png" >
   
-2.2 To make data readable for the customer who owns this data, lets setup another filter, that will reveal PII data in client's response:
+2.2 To make data readable, lets setup another filter, that will reveal PII data in client's response:
   - add new filter in the `inbound` route
   <img src="images/add_next_filter.png" >
+  
   - setup filter to process response data
   <img src="images/inbound_response_filter.png" >
   
@@ -46,18 +52,21 @@ Since we do not want to store PII data in our own storage, VGS can take data cus
 3 We've protected our system from storing PII data in our DB. But we need original data for processing it on [checkr.com](https://checkr.com/). Lets setup `outbound` routes to perform this operation.
   - go to `Routes`
   <img src="images/go_to_routes.png" width="256">
+  
   - create new `outbound route`
   <img src="images/add_outbound_route.png" >
+  
   - add `upstream` as a `checkr` API host
   <img src="images/outbound_setup_upstream.png" >
   
 3.1 Let's setup filter which will reveal PII data in client's request to `Checkr`:
   - setup filter to process request data
-  <img src="images/outbound_request_filter.png"
+  <img src="images/outbound_request_filter.png" >
   
 3.2 `Checkr` service returns user's PII data in response, so we should rid of original PII data:
   - add new filter in the `outbound` route
   <img src="images/add_next_filter.png" >
+  
   - setup filter to process response from `Checkr`
   <img src="images/outbound_response_filter.png" >
   
@@ -67,6 +76,7 @@ Since we do not want to store PII data in our own storage, VGS can take data cus
 4 We have created the VGS vault, lets use it in our app:
   - copy access urls to the vault
   <img src="images/proxy_urls.png" >
+  
   - paste it to `/idVerification/settings.py`
   
   ```
@@ -77,7 +87,8 @@ Since we do not want to store PII data in our own storage, VGS can take data cus
 - run `rerun.sh` script
 - go to [http:localhost:8000/app/](http:localhost:8000/app/)
 - add new data using UI form
-<img src="images/add_new_data_page.png.png" >
+<img src="images/add_new_data_page.png" >
+
 - lets go to data original view and try to check it on `Checkr` service
 <img src="images/check_data_page.png" >
 
