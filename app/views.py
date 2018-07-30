@@ -10,24 +10,24 @@ from django.conf import settings
 from app.checker_client import CheckerClient, CheckerServiceException
 from .models import PiiData
 
-vgs_forward_proxy = getattr(settings, "VGS_FORWARD_PROXY", None)
+vgs_outbound_route = getattr(settings, "OUTBOUND_ROUTE", None)
 
 
-def turn_on_proxy():
-    if vgs_forward_proxy is not None:
-        os.environ["HTTPS_PROXY"] = vgs_forward_proxy
+def turn_on_outbound():
+    if vgs_outbound_route is not None:
+        os.environ["OUTBOUND_ROUTE"] = vgs_outbound_route
         os.environ["REQUESTS_CA_BUNDLE"] = os.getcwd() + '/app/cert.pem'
 
 
-def turn_off_proxy():
-    if vgs_forward_proxy is not None:
-        del os.environ["HTTPS_PROXY"]
+def turn_off_outbound():
+    if vgs_outbound_route is not None:
+        del os.environ["OUTBOUND_ROUTE"]
         del os.environ["REQUESTS_CA_BUNDLE"]
 
 
 def index(request):
     pii_data_list = PiiData.objects.order_by('-pub_date')[:5]
-    host = getattr(settings, "VGS_REVERSE_PROXY", "")
+    host = getattr(settings, "INBOUND_ROUTE", "")
     context = {
         'pii_data_list': pii_data_list,
         'host': host
@@ -37,7 +37,7 @@ def index(request):
 
 def detail(request, data_id):
     pii_data = get_object_or_404(PiiData, pk=data_id)
-    host = getattr(settings, "VGS_REVERSE_PROXY", "")
+    host = getattr(settings, "INBOUND_ROUTE", "")
     context = {
         'pii_data': pii_data,
         'host': host
