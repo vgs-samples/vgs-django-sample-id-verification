@@ -91,9 +91,9 @@ def json_serial(obj):
 
 @csrf_exempt
 def add(request):
-    snn = request.POST['SNN']
+    ssn = request.POST['SSN']
     driver_license_number = request.POST['driver_license_number']
-    pii_data = PiiData(social_security_number=snn, driver_license_number=driver_license_number,
+    pii_data = PiiData(social_security_number=ssn, driver_license_number=driver_license_number,
                        pub_date=datetime.now())
     pii_data.save()
     return HttpResponse(str(pii_data.id))
