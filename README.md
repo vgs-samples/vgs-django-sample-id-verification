@@ -14,7 +14,7 @@
 4. Install docker on your local machine
 4. Run `rerun.sh` script
 
-Application will be started in Docker container and available at [http:localhost:8000/app/](http:localhost:8000/app/)
+Application will be started in Docker container and available at [http://localhost:8000/app/](http://localhost:8000/app/)
 
 Before integrating with VGS, the application works but it stores all PII (Peronsally identifiable information) data in storage.
 
