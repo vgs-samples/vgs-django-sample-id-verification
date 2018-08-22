@@ -18,6 +18,25 @@ Application will be started in Docker container and available at [http://localho
 
 Before integrating with VGS, the application works but it stores all PII (Peronsally identifiable information) data in storage.
 
+### A Quick note about Proxies, Ngrok and Django
+
+Django does not play nicely with multiple proxies. The community provides some middleware to resolve the issue, but it is outdated and doesn't work because for some reason by the time the request gets to the middleware, it is already rewritten incorrectly. 
+
+The solution is to two folds:
+
+1. force `ngrok` to specify a fixed host name via the command-line `-host-header` flag:
+
+```sh
+ngrok http  -bind-tls=true -subdomain=vgssl5 -host-header=${VGS_TENANT_IDENTIFER}.sandbox.verygoodproxy.com 8000
+```
+
+2. Please set the follow flag in django’s `settings.py`: 
+
+```python
+ALLOWED_HOSTS = ['localhost', '.verygoodproxy.com']
+```
+
+Once these configurations are set, `ngrok` and `django` play nicely together. 
 
 ## How to secure application with VGS
 _before we start, we should make our app visible from internet. You can use ngrok for it._
