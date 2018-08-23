@@ -15,13 +15,13 @@ vgs_outbound_route = getattr(settings, "OUTBOUND_ROUTE", None)
 
 def turn_on_outbound():
     if vgs_outbound_route is not None:
-        os.environ["OUTBOUND_ROUTE"] = vgs_outbound_route
+        os.environ["HTTPS_PROXY"] = vgs_outbound_route
         os.environ["REQUESTS_CA_BUNDLE"] = os.getcwd() + '/app/cert.pem'
 
 
 def turn_off_outbound():
     if vgs_outbound_route is not None:
-        del os.environ["OUTBOUND_ROUTE"]
+        del os.environ["HTTPS_PROXY"]
         del os.environ["REQUESTS_CA_BUNDLE"]
 
 
@@ -66,13 +66,13 @@ def check(request, data_id):
             geo_id = check_client.create_geo('San Francisco', 'San Francisco', 'CA')
         else:
             geo_id = geos[0]['id']
-        turn_on_proxy()
+        turn_on_outbound()
         candidate_id = check_client.create_candidate(
             ssn=pii_data.social_security_number,
             dln=pii_data.driver_license_number,
             geo_id=geo_id
         )
-        turn_off_proxy()
+        turn_off_outbound()
         report_id = check_client.create_report(candidate_id)
         report = check_client.retrieve_report(report_id)
     except CheckerServiceException as e:
