@@ -49,12 +49,12 @@ Since we do not want to store PII data in our own storage, VGS can take data cus
 ## How to secure application with VGS
 
 To make the local application visible from internet run ngrok `ngrok http 8000`.
-<img >
+<img src="images/inbound.gif" >
 1. Go to [VGS-Dashboard](https://dashboard.verygoodsecurity.com), create a new organization, create a new vault. This is where we will store PII data.
 2. Setup `inboud` traffic protection: 
     - go to `Routes`
     - create new inbound route: `Add new route` -> `New inbound route`
-    - set `Upstream Host` with `ngrok` e.g https://<id>.ngrok.io
+    - set `Upstream Host` with `ngrok` e.g `https://<some id>.ngrok.io`
 3. Setup redact on request filter to protected our system from storing PII data in our DB:
     - `Conditions`:
         - `HTTP Method` `equals` `POST`
@@ -63,7 +63,7 @@ To make the local application visible from internet run ngrok `ngrok http 8000`.
     - `REDACT` 
     - `Form` 
         - `Fields in FormData`
-            - `SNN`
+            - `SSN`
             - `driver_license_number`
     - leave all other fields with by default value        
 4. To make data readable for the customer who owns this data, lets `Add filter`, that will reveal PII data in client's response:
@@ -84,7 +84,7 @@ To make the local application visible from internet run ngrok `ngrok http 8000`.
 
 6. Setup `outbound` routes to processing original data on [checkr.com](https://checkr.com/).
     - go to `Routes`
-    - create new outbound route: `Add new route` `New outbound route`
+    - create new outbound route: `Add new route` -> `New outbound route`
     - set `Upstream Host` with `checkr` API host `api.checkr.com`
 
 7. Setup filter for revealing PII data in client's request to `Checkr`:
