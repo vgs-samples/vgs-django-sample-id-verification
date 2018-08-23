@@ -89,24 +89,24 @@ To make the local application visible from internet run ngrok `ngrok http 8000`.
 
 7. Setup filter for revealing PII data in client's request to `Checkr`:
    - `Conditions`:
-          - `Pathinfo` `equals` `/v1/candidates`
-          - `HTTP Method` `equals` `POST`
-      - `Phase` `On request`
-      - `REVEAL` 
-      - `Json` 
-          - `Fields in JSON path`
-              - `$.ssn`
-              - `$.driver_license_number`
-      - leave all other field values as is 
+      - `Pathinfo` `equals` `/v1/candidates`
+      - `HTTP Method` `equals` `POST`
+   - `Phase` `On request`
+   - `REVEAL` 
+   - `Json` 
+    - `Fields in JSON path`
+        - `$.ssn`
+        - `$.driver_license_number`
+   - leave all other field values as is 
 8. To get rid of storing user's PII data from `Checkr` service response add new `REDACT` `on response` filter in the `outbound` route
    - `Conditions`:
-          - `Pathinfo` `equals` `/v1/candidates`
+        - `Pathinfo` `equals` `/v1/candidates`
    - `Phase` `On response`
    - `REDACT` 
    - `Json` 
-         - `Fields in JSON path`
-            - `$.ssn`
-            - `$.driver_license_number`
+    - `Fields in JSON path`
+        - `$.ssn`
+        - `$.driver_license_number`
               
 9. Click `Save` button and check the result of _Outbound_ routes creation in `Routes`.
   <img src="images/outbound_check_result.png" >
