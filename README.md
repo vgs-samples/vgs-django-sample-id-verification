@@ -41,12 +41,6 @@ ALLOWED_HOSTS = ['localhost', '.verygoodproxy.com']
 Once these configurations are set, `ngrok` and `django` play nicely together. 
 
 ## How to secure application with VGS
-_before we start, we should make our app visible from internet. You can use ngrok for it._
-<img src="images/run_ngrok.png">
-
-Since we do not want to store PII data in our own storage, VGS can take data custodianship.
-
-## How to secure application with VGS
 
 To make the local application visible from internet run ngrok `ngrok http 8000`. Use ngrok URI for setting up inbound route.
 <img src="images/inbound.gif" >
