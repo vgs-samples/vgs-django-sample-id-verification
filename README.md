@@ -48,7 +48,7 @@ Since we do not want to store PII data in our own storage, VGS can take data cus
 
 ## How to secure application with VGS
 
-To make the local application visible from internet run ngrok `ngrok http 8000`.
+To make the local application visible from internet run ngrok `ngrok http 8000`. Use ngrok URI for setting up inbound route.
 <img src="images/inbound.gif" >
 1. Go to [VGS-Dashboard](https://dashboard.verygoodsecurity.com), create a new organization, create a new vault. This is where we will store PII data.
 2. Setup `inboud` traffic protection: 
@@ -83,6 +83,7 @@ To make the local application visible from internet run ngrok `ngrok http 8000`.
   <img src="images/inbound_check_result.png" >
 
 6. Setup `outbound` routes to processing original data on [checkr.com](https://checkr.com/).
+<img src="images/outbound.gif" >
     - go to `Routes`
     - create new outbound route: `Add new route` -> `New outbound route`
     - set `Upstream Host` with `checkr` API host `api.checkr.com`
