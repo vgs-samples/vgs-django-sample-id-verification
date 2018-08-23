@@ -83,7 +83,7 @@ To make the local application visible from internet run ngrok `ngrok http 8000`.
   <img src="images/inbound_check_result.png" >
 6. Setup `outbound` routes to processing original data on [checkr.com](https://checkr.com/).
     - go to `Routes`
-    - create new outbound route: `Add new route` -> `New outbound route`
+    - create new outbound route: `Add new route` `New outbound route`
     - set `Upstream Host` with `checkr` API host `api.checkr.com`
 7. Setup filter for revealing PII data in client's request to `Checkr`:
    - `Conditions`:
