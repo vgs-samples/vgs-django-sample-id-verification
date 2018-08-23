@@ -123,7 +123,7 @@ To make the local application visible from internet run ngrok `ngrok http 8000`.
 - go to [http://localhost:8000/app/](http://localhost:8000/app/)
 - add new data using UI form
 - go to data original view and try to check it on `Checkr` service
-<img src="images/django_demo.mp4" >
+<img src="images/django_demo.gif" >
 
   
 ## What is VGS?
