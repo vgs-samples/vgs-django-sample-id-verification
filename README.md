@@ -81,8 +81,9 @@ To make the local application visible from internet run ngrok `ngrok http 8000`.
     - leave all other fields with by default value  
 5. Click `Save` button and check result of _Inbound_ routes creation in `Routes`.
   <img src="images/inbound_check_result.png" >
-6. Setup `outbound` routes to processing original data on [checkr.com](https://checkr.com/).
+Next we are going to create Outbound route.
 <img src="images/outbound.gif" >
+6. Setup `outbound` route for processing original data on [checkr.com](https://checkr.com/).
 - go to `Routes`
 - create new outbound route: `Add new route` -> `New outbound route`
 - set `Upstream Host` with `checkr` API host `api.checkr.com`
