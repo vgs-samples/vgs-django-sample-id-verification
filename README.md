@@ -2,16 +2,18 @@
 <p align="center"><b>vgs-django-pii-sample</b></p>
 <p align="center"><i>Sample of using VGS for securing PII data(Django).</i></p>
 
+# Instructions for using this App
+This demo app demonstrates the typical scenario for secure/revealing traffic from customer application to payments operator.
+
 ## Requirements
-- [Docker](https://www.docker.com/get-docker)
-- [ngrok](https://ngrok.com/)
+- installed [Docker](https://www.docker.com/get-docker)
+- installed [ngrok](https://ngrok.com/)
 - account on [checkr.com](https://checkr.com/)
 
-## Quick Start
+## First Start
 1. Clone repository
-2. Register on checkr.com
+2. Insure `INBOUND_ROUTE` and `OUTBOUND_ROUTE` in 'idVerification/settings.py' is empty
 3. Put your `CHECKER_API_KEY` to `docker-compose.yml` file
-4. Install docker on your local machine
 4. Run `rerun.sh` script
 
 Application will be started in Docker container and available at [http://localhost:8000/app/](http://localhost:8000/app/)
@@ -39,77 +41,85 @@ ALLOWED_HOSTS = ['localhost', '.verygoodproxy.com']
 Once these configurations are set, `ngrok` and `django` play nicely together. 
 
 ## How to secure application with VGS
-_before we start, we should make our app visible from internet. You can use ngrok for it._
-<img src="images/run_ngrok.png">
 
-Since we do not want to store PII data in our own storage, VGS can take data custodianship.
+To make the local application visible from internet run ngrok `ngrok http 8000`. Use ngrok URI for setting up inbound route.
+<img src="images/inbound.gif" >
 1. Go to [VGS-Dashboard](https://dashboard.verygoodsecurity.com), create a new organization, create a new vault. This is where we will store PII data.
-2. Lets setup `inboud` traffic protection: 
-  - go to `Routes`
-  <img src="images/go_to_routes.png" width="256">
-  
-  - create new `inbound route`
-  <img src="images/new_inbound_route.png" >
-  
-  - add `upstream` as an app host from `ngrok`
-  <img src="images/inbound_setup_upstream.png" >
-  
-2.1 Lets setup filter which will redact PII data in client's request:
-  - setup filter to process request data
-  <img src="images/inbound_request_filter.png" >
-  
-2.2 To make data readable for the customer who owns this data, lets setup another filter, that will reveal PII data in client's response:
-  - add new filter in the `inbound` route
-  <img src="images/add_next_filter.png" >
-  
-  - setup filter to process response data
-  <img src="images/inbound_response_filter.png" >
-  
-**Done!**`Inbound` route is already created. Click `Save` button and check result.
+2. Setup `inboud` traffic protection: 
+    - go to `Routes`
+    - create new inbound route: `Add new route` -> `New inbound route`
+    - set `Upstream Host` with `ngrok` e.g `https://<some id>.ngrok.io`
+3. Setup redact on request filter to protected our system from storing PII data in our DB:
+    - `Conditions`:
+        - `HTTP Method` `equals` `POST`
+        - `Pathinfo` `equals` `/app/add`
+    - `Phase` `On request`
+    - `REDACT` 
+    - `Form` 
+        - `Fields in FormData`
+            - `SSN`
+            - `driver_license_number`
+    - leave all other fields with by default value        
+4. To make data readable for the customer who owns this data, lets `Add filter`, that will reveal PII data in client's response:
+    - add new filter in the `inbound` route
+    - `Conditions`:
+        - `Pathinfo` `begins with` `/app/api/data`
+        - `HTTP Method` `equals` `GET`
+        - `ContentType` `equals` `application/json`
+    - `Phase` `On response`
+    - `REVEAL` 
+    - `Json` 
+        - `Fields in JSON path`
+            - `$.social_security_number`
+            - `$.driver_license_number`
+    - leave all other fields with by default value  
+5. Click `Save` button and check result of _Inbound_ routes creation in `Routes`.
   <img src="images/inbound_check_result.png" >
+Next we are going to create Outbound route.
+  <img src="images/outbound.gif" >
 
-3 We've protected our system from storing PII data in our DB. But we need original data for processing it on [checkr.com](https://checkr.com/). Lets setup `outbound` routes to perform this operation.
-  - go to `Routes`
-  <img src="images/go_to_routes.png" width="256">
-  
-  - create new `outbound route`
-  <img src="images/add_outbound_route.png" >
-  
-  - add `upstream` as a `checkr` API host
-  <img src="images/outbound_setup_upstream.png" >
-  
-3.1 Let's setup filter which will reveal PII data in client's request to `Checkr`:
-  - setup filter to process request data
-  <img src="images/outbound_request_filter.png" >
-  
-3.2 `Checkr` service returns user's PII data in response, so we should rid of original PII data:
-  - add new filter in the `outbound` route
-  <img src="images/add_next_filter.png" >
-  
-  - setup filter to process response from `Checkr`
-  <img src="images/outbound_response_filter.png" >
-  
-**Done!**`Outbound` route is already created. Click `Save` button and check result.
+6. Setup `outbound` route for processing original data on [checkr.com](https://checkr.com/).
+    - go to `Routes`
+    - create new outbound route: `Add new route` -> `New outbound route`
+    - set `Upstream Host` with `checkr` API host `api.checkr.com`
+7. Setup filter for revealing PII data in client's request to `Checkr`:
+   - `Conditions`:
+      - `Pathinfo` `equals` `/v1/candidates`
+      - `HTTP Method` `equals` `POST`
+   - `Phase` `On request`
+   - `REVEAL` 
+   - `Json` 
+    - `Fields in JSON path`
+        - `$.ssn`
+        - `$.driver_license_number`
+   - leave all other field values as is 
+8. To get rid of storing user's PII data from `Checkr` service response add new `REDACT` `on response` filter in the `outbound` route
+   - `Conditions`:
+        - `Pathinfo` `equals` `/v1/candidates`
+   - `Phase` `On response`
+   - `REDACT` 
+   - `Json` 
+    - `Fields in JSON path`
+        - `$.ssn`
+        - `$.driver_license_number`
+              
+9. Click `Save` button and check the result of _Outbound_ routes creation in `Routes`.
   <img src="images/outbound_check_result.png" >
   
-4 We have created the VGS vault, lets use it in our app:
-  - copy access urls to the vault
+10. Use `Vault URLs` it in our app:
   <img src="images/proxy_urls.png" >
   
-  - paste it to `/idVerification/settings.py`
-  
+  - copy the URLS to `/idVerification/settings.py`
   ```
-  VGS_REVERSE_PROXY='https://tntvsu7b08w.SANDBOX.verygoodproxy.com' #inbound
-  VGS_FORWARD_PROXY='https://US4HaDCukkzFFPcGe3nYR933:f0748f46-dcdd-4320-a7de-8f2204fef53a@tntvsu7b08w.SANDBOX.verygoodproxy.com:8080' #outbound
+  INBOUND_ROUTE='https://tntdbopmilp.SANDBOX.verygoodproxy.com' #inbound
+  OUTBOUND_ROUTE='https://US2yjMXkaJddDpxSCj1BCFb7:056c520b-5564-4750-bb96-d774104090e0@tntdbopmilp.SANDBOX.verygoodproxy.com:8080' #outbound
   ```
-**Done! Our app is now secured by VGS. Lets check it out!**
-- run `rerun.sh` script
-- go to [http:localhost:8000/app/](http:localhost:8000/app/)
+11. Our app is now secured by VGS. Lets check it out.
+- restart `rerun.sh` script
+- go to [http://localhost:8000/app/](http://localhost:8000/app/)
 - add new data using UI form
-<img src="images/add_new_data_page.png" >
-
-- lets go to data original view and try to check it on `Checkr` service
-<img src="images/check_data_page.png" >
+- go to data original view and try to check it on `Checkr` service
+<img src="images/django_demo.gif" >
 
   
 ## What is VGS?
