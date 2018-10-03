@@ -27,8 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-# INBOUND_ROUTE ='https://tntvsu7b08w.SANDBOX.verygoodproxy.com'
-OUTBOUND_ROUTE ='https://USju2KiSSDqXBSvifhzSYkQz:074f9f4b-a5fc-4cb1-838b-8763107c6ac9@tntvsu7b08w.sandbox.verygoodproxy.com:8080'
+# INBOUND_ROUTE ='https://tntdwsvgf8u.SANDBOX.verygoodproxy.com'
+OUTBOUND_ROUTE ='https://USkvZxL8BJZf4RMdYjKmQzaN:df991a3d-57a4-4cbb-ba79-ed90f96e2b45@tntdwsvgf8u.SANDBOX.verygoodproxy.com:8080'
 CHECKER_HOST='https://api.checkr.com'
 
 # Application definition
