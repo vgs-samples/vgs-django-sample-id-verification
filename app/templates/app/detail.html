@@ -18,7 +18,7 @@
         $("#loading_message").show();
         $.get('{{ host }}/app/api/checkr/{{pii_data.id}}/',
               function onSuccess(data){
-                  $("#checkr_output").text(JSON.stringify(data, null, 2))
+                  $("#checkr_output").text(JSON.stringify(data, null, 2));
                   $("#loading_message").hide();
               }
         )

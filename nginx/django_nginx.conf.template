@@ -1,0 +1,12 @@
+server {
+   listen       8001;
+   server_name  django_server_nginx;
+
+   location / {
+       proxy_pass ${DJANGO_APP_URL};
+   }
+
+   location ~ ^/(app/add|app/api/data/) {
+       proxy_pass ${VGS_INBOUND_URL};
+   }
+}

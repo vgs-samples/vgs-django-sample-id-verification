@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-INBOUND_ROUTE ='https://tntdwsvgf8u.SANDBOX.verygoodproxy.com'
+# INBOUND_ROUTE ='https://tntdwsvgf8u.SANDBOX.verygoodproxy.com'
 OUTBOUND_ROUTE ='https://USkvZxL8BJZf4RMdYjKmQzaN:df991a3d-57a4-4cbb-ba79-ed90f96e2b45@tntdwsvgf8u.SANDBOX.verygoodproxy.com:8080'
 CHECKER_HOST='https://api.checkr.com'
 
