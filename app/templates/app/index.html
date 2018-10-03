@@ -9,22 +9,6 @@
     <input type="submit" value="Add" />
 </form>
 
-<script>
-
-    $( "#form_id" ).submit(function( event ) {
-        event.preventDefault();
-        $.post('{{ host }}/app/add', {
-            'csrfmiddlewaretoken': $("input[name='csrfmiddlewaretoken']").val(),
-            'SSN': $("input[name^='SSN']").val(),
-            'driver_license_number': $("input[name^='driver_license_number']").val()
-        },
-        function onSuccess(id){
-            window.location.href = "/app/" + id +"/"
-        }
-        );
-    });
-</script>
-
 <h1>Data from application storage</h1>
 {% if pii_data_list %}
 <ul>

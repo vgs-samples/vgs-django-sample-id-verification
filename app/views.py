@@ -2,8 +2,7 @@ import json
 import os
 from datetime import datetime
 
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.conf import settings
 
@@ -89,11 +88,10 @@ def json_serial(obj):
     raise TypeError("Type %s not serializable" % type(obj))
 
 
-@csrf_exempt
 def add(request):
     ssn = request.POST['SSN']
     driver_license_number = request.POST['driver_license_number']
     pii_data = PiiData(social_security_number=ssn, driver_license_number=driver_license_number,
                        pub_date=datetime.now())
     pii_data.save()
-    return HttpResponse(str(pii_data.id))
+    return HttpResponseRedirect("/app/" + str(pii_data.id) + "/")
