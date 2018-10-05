@@ -42,7 +42,7 @@ Once these configurations are set, `ngrok` and `django` play nicely together.
 
 ## How to secure application with VGS
 
-To make the local application visible from internet run ngrok `ngrok http 8000`. Use ngrok URI for setting up inbound route.
+To make the local application visible from internet run ngrok `ngrok http 8000`(not `8001` - used by Nginx). Use ngrok URI for setting up inbound route.
 <img src="images/inbound.gif" >
 1. Go to [VGS-Dashboard](https://dashboard.verygoodsecurity.com), create a new organization, create a new vault. This is where we will store PII data.
 2. Setup `inboud` traffic protection: 
