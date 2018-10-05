@@ -12,7 +12,8 @@ This demo app demonstrates the typical scenario for secure/revealing traffic fro
 
 ## First Start
 1. Clone repository
-2. Insure `INBOUND_ROUTE` and `OUTBOUND_ROUTE` in 'idVerification/settings.py' is empty
+2. Insure `INBOUND_ROUTE` and `OUTBOUND_ROUTE` in `idVerification/settings.py` is empty. 
+And `VGS_INBOUND_URL` in `docker-compose.yml` set to `http://vgs-django-sample:8000`. [Why we use Nginx](Why we use Nginx)
 3. Put your `CHECKER_API_KEY` to `docker-compose.yml` file
 4. Run `rerun.sh` script
 
@@ -109,17 +110,32 @@ Next we are going to create Outbound route.
 10. Use `Vault URLs` it in our app:
   <img src="images/proxy_urls.png" >
   
-  - copy the URLS to `/idVerification/settings.py`
+  - copy the URLS `docker-compose.yml` [Why we use Nginx](Why we use Nginx)
   ```
   INBOUND_ROUTE='https://tntdbopmilp.SANDBOX.verygoodproxy.com' #inbound
+  ```
+  and to `/idVerification/settings.py`
+  ```
   OUTBOUND_ROUTE='https://US2yjMXkaJddDpxSCj1BCFb7:056c520b-5564-4750-bb96-d774104090e0@tntdbopmilp.SANDBOX.verygoodproxy.com:8080' #outbound
   ```
 11. Our app is now secured by VGS. Lets check it out.
 - restart `rerun.sh` script
-- go to [http://localhost:8000/app/](http://localhost:8000/app/)
+- go to [http://localhost:8001/app/](http://localhost:8001/app/)
 - add new data using UI form
 - go to data original view and try to check it on `Checkr` service
 <img src="images/django_demo.gif" >
+
+## Why we use Nginx
+Sample application has [CSRF protection](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)). Protection based on 2 tockens that generated/verified by Django server. One of them stores in browser cookies, so we need same host for django server and VGS proxy to allow browser add CSRF cookie to VGS proxy request.
+
+How it works:
+<img src="images/django_reverse_proxy_with_csrf.png" >
+
+If you are not intereasted in CSRF protection(E.g. you do not have browser UI), you can run example without Nginx at all.
+Use `INBOUND_ROUTE` in `idVerification/settings.py` instread of `INBOUND_ROUTE` in `docker-compose.yml` and comment `vgs-django-nginx` service in `docker-compose`. Also you shoud ignore CSRF in APP: add `@csrf_exempt` annotation on `add` method in `app/views.py`. Use [http://localhost:8000/app/](http://localhost:8000/app/) to get access to application.
+
+How it works:
+<img src="images/django_reverse_proxy_without_csrf.png" >
 
   
 ## What is VGS?
