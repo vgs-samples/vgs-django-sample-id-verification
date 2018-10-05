@@ -13,7 +13,7 @@ This demo app demonstrates the typical scenario for secure/revealing traffic fro
 ## First Start
 1. Clone repository
 2. Insure `INBOUND_ROUTE` and `OUTBOUND_ROUTE` in `idVerification/settings.py` is empty. 
-And `VGS_INBOUND_URL` in `docker-compose.yml` set to `http://vgs-django-sample:8000`. [Why we use Nginx](Why we use Nginx)
+And `VGS_INBOUND_URL` in `docker-compose.yml` set to `http://vgs-django-sample:8000`. [Why we use Nginx](https://github.com/verygoodsecurity/vgs-django-sample-id-verification#why-we-use-nginx)
 3. Put your `CHECKER_API_KEY` to `docker-compose.yml` file
 4. Run `rerun.sh` script
 
@@ -110,7 +110,7 @@ Next we are going to create Outbound route.
 10. Use `Vault URLs` it in our app:
   <img src="images/proxy_urls.png" >
   
-  - copy the URLS `docker-compose.yml` [Why we use Nginx](Why we use Nginx)
+  - copy the URLS `docker-compose.yml` [Why we use Nginx](https://github.com/verygoodsecurity/vgs-django-sample-id-verification#why-we-use-nginx)
   ```
   INBOUND_ROUTE='https://tntdbopmilp.SANDBOX.verygoodproxy.com' #inbound
   ```
