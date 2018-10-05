@@ -16,7 +16,7 @@ This demo app demonstrates the typical scenario for secure/revealing traffic fro
 3. Put your `CHECKER_API_KEY` to `docker-compose.yml` file
 4. Run `rerun.sh` script
 
-Application will be started in Docker container and available at [http://localhost:8000/app/](http://localhost:8000/app/)
+Application will be started in Docker container and available at [http://localhost:8001/app/](http://localhost:8001/app/)
 
 Before integrating with VGS, the application works but it stores all PII (Peronsally identifiable information) data in storage.
 
