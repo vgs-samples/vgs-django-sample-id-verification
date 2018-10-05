@@ -129,13 +129,8 @@ Next we are going to create Outbound route.
 Sample application has [CSRF protection](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)). Protection based on 2 tockens that generated/verified by Django server. One of them stores in browser cookies, so we need same host for django server and VGS proxy to allow browser add CSRF cookie to VGS proxy request.
 
 How it works:
+
 <img src="images/django_reverse_proxy_with_csrf.png" >
-
-If you are not intereasted in CSRF protection(E.g. you do not have browser UI), you can run example without Nginx at all.
-Use `INBOUND_ROUTE` in `idVerification/settings.py` instread of `INBOUND_ROUTE` in `docker-compose.yml` and comment `vgs-django-nginx` service in `docker-compose`. Also you shoud ignore CSRF in APP: add `@csrf_exempt` annotation on `add` method in `app/views.py`. Use [http://localhost:8000/app/](http://localhost:8000/app/) to get access to application.
-
-How it works:
-<img src="images/django_reverse_proxy_without_csrf.png" >
 
   
 ## What is VGS?
