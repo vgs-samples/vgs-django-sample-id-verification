@@ -21,9 +21,7 @@ Application will be started in a Docker container and available at [http://local
 
 Before integrating with VGS, the application works but it stores all PII (Peronsally identifiable information) data in storage.
 
-### A Quick note about Proxies, Ngrok and Django
-
-The solution is twofold:
+### Ngrok and Django
 
 1. Force `ngrok` to specify a fixed host name via the command-line `-host-header` flag:
 
