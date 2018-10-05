@@ -7,6 +7,6 @@ server {
    }
 
    location ~ ^/(app/add|app/api/data/) {
-       proxy_pass ${VGS_INBOUND_URL};
+       proxy_pass ${INBOUND_ROUTE};
    }
 }
