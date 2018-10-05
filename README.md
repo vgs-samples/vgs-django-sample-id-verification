@@ -3,21 +3,21 @@
 <p align="center"><i>Sample of using VGS for securing PII data(Django).</i></p>
 
 # Instructions for using this App
-This demo app demonstrates the typical scenario for secure/revealing traffic from customer application to payments operator.
+This demo app demonstrates a typical scenario for secure/revealing traffic from customer application to a payments operator.
 
 ## Requirements
-- installed [Docker](https://www.docker.com/get-docker)
-- installed [ngrok](https://ngrok.com/)
-- account on [checkr.com](https://checkr.com/)
+- Installed [Docker](https://www.docker.com/get-docker)
+- Installed [ngrok](https://ngrok.com/)
+- Account on [checkr.com](https://checkr.com/)
 
 ## First Start
-1. Clone repository
-2. Insure `INBOUND_ROUTE` and `OUTBOUND_ROUTE` in `idVerification/settings.py` is empty. 
-And `VGS_INBOUND_URL` in `docker-compose.yml` set to `http://vgs-django-sample:8000`. [Why we use Nginx](https://github.com/verygoodsecurity/vgs-django-sample-id-verification#why-we-use-nginx)
-3. Put your `CHECKER_API_KEY` to `docker-compose.yml` file
+1. Clone this repository
+2. Ensure both `INBOUND_ROUTE` and `OUTBOUND_ROUTE` in `idVerification/settings.py` are empty. 
+ 2.1 Ensure `VGS_INBOUND_URL` in `docker-compose.yml` is set to `http://vgs-django-sample:8000`. [Why we use Nginx](https://github.com/verygoodsecurity/vgs-django-sample-id-verification#why-we-use-nginx)
+3. Set your `CHECKER_API_KEY` in `docker-compose.yml`
 4. Run `rerun.sh` script
 
-Application will be started in Docker container and available at [http://localhost:8001/app/](http://localhost:8001/app/)
+Application will be started in a Docker container and available at [http://localhost:8001/app/](http://localhost:8001/app/)
 
 Before integrating with VGS, the application works but it stores all PII (Peronsally identifiable information) data in storage.
 
@@ -25,7 +25,7 @@ Before integrating with VGS, the application works but it stores all PII (Perons
 
 Django does not play nicely with multiple proxies. The community provides some middleware to resolve the issue, but it is outdated and doesn't work because for some reason by the time the request gets to the middleware, it is already rewritten incorrectly. 
 
-The solution is two folds:
+The solution is twofold:
 
 1. Force `ngrok` to specify a fixed host name via the command-line `-host-header` flag:
 
