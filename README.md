@@ -23,8 +23,6 @@ Before integrating with VGS, the application works but it stores all PII (Perons
 
 ### A Quick note about Proxies, Ngrok and Django
 
-Django does not play nicely with multiple proxies. The community provides some middleware to resolve the issue, but it is outdated and doesn't work because for some reason by the time the request gets to the middleware, it is already rewritten incorrectly. 
-
 The solution is twofold:
 
 1. Force `ngrok` to specify a fixed host name via the command-line `-host-header` flag:
