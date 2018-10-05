@@ -15,5 +15,6 @@ services:
      - "8001:8001"
     environment:
      - DJANGO_APP_URL=http://vgs-django-sample:8000
-     - VGS_INBOUND_URL=https://tntvsu7b08w.SANDBOX.verygoodproxy.com
+     - VGS_INBOUND_URL=http://vgs-django-sample:8000
+#     - VGS_INBOUND_URL=https://tntvsu7b08w.SANDBOX.verygoodproxy.com
     command: /bin/bash -c "envsubst < /etc/nginx/conf.d/django_nginx.conf.template > /etc/nginx/conf.d/default.conf && cat /etc/nginx/conf.d/default.conf &&nginx -g 'daemon off;'"
