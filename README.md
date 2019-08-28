@@ -12,7 +12,7 @@ This demo app demonstrates a typical scenario for secure/revealing traffic from 
 
 ## First Start
 1. Clone this repository
-2. Ensure both `INBOUND_ROUTE` and `OUTBOUND_ROUTE` in `idVerification/settings.py` are empty. 
+2. Ensure both `INBOUND_ROUTE` and `OUTBOUND_ROUTE` in `idVerification/settings.py` are empty.
  2.1 Ensure `VGS_INBOUND_URL` in `docker-compose.yml` is set to `http://vgs-django-sample:8000`. [Why we use Nginx](https://github.com/verygoodsecurity/vgs-django-sample-id-verification#why-we-use-nginx)
 3. Set your `CHECKER_API_KEY` in `docker-compose.yml`
 4. Run `rerun.sh` script
@@ -26,37 +26,43 @@ Before integrating with VGS, the application works but it stores all PII (Perons
 1. Force `ngrok` to specify a fixed host name via the command-line `-host-header` flag:
 
 ```sh
-ngrok http  -bind-tls=true -subdomain=vgssl5 -host-header=${VGS_TENANT_IDENTIFER}.sandbox.verygoodproxy.com 8000
+ngrok http -bind-tls=true -subdomain=vgssl5 -host-header=${VGS_TENANT_IDENTIFER}.sandbox.verygoodproxy.com 8000
 ```
 
-2. Please set the follow flag in django’s `settings.py`: 
+*NOTE:* Can also simply create a random subdomain without using the static paid feature above for `ngrok`
+
+```sh
+ngrok http 8000
+```
+
+2. Please set the follow flag in django’s `settings.py`:
 
 ```python
 ALLOWED_HOSTS = ['localhost', '.verygoodproxy.com']
 ```
 
-Once these configurations are set, `ngrok` and `django` play nicely together. 
+Once these configurations are set, `ngrok` and `django` play nicely together.
 
 ## How to secure application with VGS
 
 To make the local application visible from internet run ngrok `ngrok http 8000`(not `8001` - used by Nginx). Use ngrok URI for setting up inbound route.
 <img src="images/inbound.gif" >
 1. Go to [VGS-Dashboard](https://dashboard.verygoodsecurity.com), create a new organization, create a new vault. This is where we will store PII data.
-2. Setup `inboud` traffic protection: 
+2. Setup `inboud` traffic protection:
     - go to `Routes`
     - create new inbound route: `Add new route` -> `New inbound route`
-    - set `Upstream Host` with `ngrok` e.g `https://<some id>.ngrok.io`
+    - set `Upstream Host` to the `ngrok` endpoint from above (e.g. `https://<some id>.ngrok.io` -> localhost:8000)
 3. Setup redact on request filter to protected our system from storing PII data in our DB:
     - `Conditions`:
         - `HTTP Method` `equals` `POST`
         - `Pathinfo` `equals` `/app/add`
     - `Phase` `On request`
-    - `REDACT` 
-    - `Form` 
+    - `REDACT`
+    - `Form`
         - `Fields in FormData`
             - `SSN`
             - `driver_license_number`
-    - leave all other fields with by default value        
+    - leave all other fields with by default value
 4. To make data readable for the customer who owns this data, lets `Add filter`, that will reveal PII data in client's response:
     - add new filter in the `inbound` route
     - `Conditions`:
@@ -64,12 +70,12 @@ To make the local application visible from internet run ngrok `ngrok http 8000`(
         - `HTTP Method` `equals` `GET`
         - `ContentType` `equals` `application/json`
     - `Phase` `On response`
-    - `REVEAL` 
-    - `Json` 
+    - `REVEAL`
+    - `Json`
         - `Fields in JSON path`
             - `$.social_security_number`
             - `$.driver_license_number`
-    - leave all other fields with by default value  
+    - leave all other fields with by default value
 5. Click `Save` button and check result of _Inbound_ routes creation in `Routes`.
   <img src="images/inbound_check_result.png" >
 Next we are going to create Outbound route.
@@ -84,28 +90,28 @@ Next we are going to create Outbound route.
       - `Pathinfo` `equals` `/v1/candidates`
       - `HTTP Method` `equals` `POST`
    - `Phase` `On request`
-   - `REVEAL` 
-   - `Json` 
+   - `REVEAL`
+   - `Json`
     - `Fields in JSON path`
         - `$.ssn`
         - `$.driver_license_number`
-   - leave all other field values as is 
+   - leave all other field values as is
 8. To get rid of storing user's PII data from `Checkr` service response add new `REDACT` `on response` filter in the `outbound` route
    - `Conditions`:
         - `Pathinfo` `equals` `/v1/candidates`
    - `Phase` `On response`
-   - `REDACT` 
-   - `Json` 
+   - `REDACT`
+   - `Json`
     - `Fields in JSON path`
         - `$.ssn`
         - `$.driver_license_number`
-              
+
 9. Click `Save` button and check the result of _Outbound_ routes creation in `Routes`.
   <img src="images/outbound_check_result.png" >
-  
+
 10. Use `Vault URLs` it in our app:
   <img src="images/proxy_urls.png" >
-  
+
   - copy the URLS `docker-compose.yml` [Why we use Nginx](https://github.com/verygoodsecurity/vgs-django-sample-id-verification#why-we-use-nginx)
   ```
   INBOUND_ROUTE='https://tntdbopmilp.SANDBOX.verygoodproxy.com' #inbound
@@ -128,7 +134,7 @@ How it works:
 
 <img src="images/django_reverse_proxy_with_csrf.png" >
 
-  
+
 ## What is VGS?
 
 _**Want to just jump right in?** Check out our [getting started
