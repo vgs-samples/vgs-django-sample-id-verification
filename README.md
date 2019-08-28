@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/verygoodsecurity/vgs-django-sample-id-verification.svg?style=svg)](https://circleci.com/gh/verygoodsecurity/vgs-django-sample-id-verification)
+
 <p align="center"><a href="https://www.verygoodsecurity.com/"><img src="https://avatars0.githubusercontent.com/u/17788525" width="128" alt="VGS Logo"></a></p>
 <p align="center"><b>vgs-django-pii-sample</b></p>
 <p align="center"><i>Sample of using VGS for securing PII data(Django).</i></p>
