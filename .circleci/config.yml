@@ -1,0 +1,43 @@
+version: 2
+jobs:
+  test:
+    machine: true
+    working_directory: ~/testing
+
+    environment:
+      TEST_RESULTS: /tmp/test-results
+
+    steps:
+      - checkout
+      - run: |
+          VERSION=$CIRCLE_SHA1 docker-compose build
+
+  deploy:
+    machine: true
+    working_directory: ~/testing
+
+    environment:
+      TEST_RESULTS: /tmp/test-results
+
+    steps:
+      - checkout
+      - run: VERSION=${CIRCLE_TAG:-development-$CIRCLE_SHA1}  docker-compose build
+      - run: |
+          docker login -u="$QUAY_DOCKER_LOGIN" -p="$QUAY_DOCKER_LOGIN_PASSWORD" quay.io
+          VERSION=${CIRCLE_TAG:-development-$CIRCLE_SHA1} docker-compose push
+
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - test:
+          filters:
+            tags:
+              only: /.+/
+      - deploy:
+          context: circleci
+          filters:
+            tags:
+              only:
+                - /^development-\d+\.\d+\.\d+(?:-\w+){0,1}$/
+                - /^production-\d+\.\d+\.\d+(?:-\w+){0,1}$/

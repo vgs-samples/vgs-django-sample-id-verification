@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/verygoodsecurity/vgs-django-sample-id-verification.svg?style=svg)](https://circleci.com/gh/verygoodsecurity/vgs-django-sample-id-verification)
+
 <p align="center"><a href="https://www.verygoodsecurity.com/"><img src="https://avatars0.githubusercontent.com/u/17788525" width="128" alt="VGS Logo"></a></p>
 <p align="center"><b>vgs-django-pii-sample</b></p>
 <p align="center"><i>Sample of using VGS for securing PII data(Django).</i></p>
@@ -27,6 +29,7 @@ Before integrating with VGS, the application works but it stores all PII (Perons
 
 ```sh
 ngrok http -bind-tls=true -subdomain=vgssl5 -host-header=${VGS_TENANT_IDENTIFER}.sandbox.verygoodproxy.com 8000
+
 ```
 
 *NOTE:* Can also simply create a random subdomain without using the static paid feature above for `ngrok`
