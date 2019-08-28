@@ -29,6 +29,7 @@ Before integrating with VGS, the application works but it stores all PII (Perons
 
 ```sh
 ngrok http -bind-tls=true -subdomain=vgssl5 -host-header=${VGS_TENANT_IDENTIFER}.sandbox.verygoodproxy.com 8000
+
 ```
 
 *NOTE:* Can also simply create a random subdomain without using the static paid feature above for `ngrok`
