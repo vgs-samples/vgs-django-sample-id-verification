@@ -10,7 +10,7 @@ jobs:
     steps:
       - checkout
       - run: |
-          VERSION=$CIRCLE_SHA1 docker-compose run tests
+          VERSION=$CIRCLE_SHA1 docker-compose build
 
   deploy:
     machine: true
